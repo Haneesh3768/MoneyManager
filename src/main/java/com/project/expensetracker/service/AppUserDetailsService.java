@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.project.expensetracker.entity.ProfileEntity;
-import com.project.expensetracker.repostiory.ProfileRepository;
+import com.project.expensetracker.repository.ProfileRepository;
 
 import lombok.RequiredArgsConstructor;
 

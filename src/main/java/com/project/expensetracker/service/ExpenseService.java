@@ -1,5 +1,8 @@
 package com.project.expensetracker.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.project.expensetracker.dto.ExpenseDTO;
@@ -29,6 +32,18 @@ public class ExpenseService {
 		return toDto(newExpense);
 		
 	}
+	
+	//retrieve all expenses for the current month/based on start and end date
+	public List<ExpenseDTO> getCurrentMonthExpensesForCurrentUser(){
+		ProfileEntity profile = profileService.getCurrentProfile();
+		LocalDate now = LocalDate.now();
+		LocalDate startDate = now.withDayOfMonth(1);
+		LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
+		List<ExpenseEntity> list = expenseRepository.findByProfileIdAndDateBetween(profile.getId(),startDate, endDate);
+		return list.stream().map(this::toDto).toList();
+		
+	}
+	
 	
 	//helper methods
 	private ExpenseEntity toEntity(ExpenseDTO dto, ProfileEntity profile,CategoryEntity category) {

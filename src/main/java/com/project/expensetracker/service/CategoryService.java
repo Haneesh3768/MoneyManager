@@ -10,7 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.project.expensetracker.dto.CategoryDTO;
 import com.project.expensetracker.entity.CategoryEntity;
 import com.project.expensetracker.entity.ProfileEntity;
-import com.project.expensetracker.repostiory.CategoryRepository;
+import com.project.expensetracker.repository.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;
 

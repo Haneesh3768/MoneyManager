@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.project.expensetracker.dto.AuthDTO;
 import com.project.expensetracker.dto.ProfileDTO;
 import com.project.expensetracker.entity.ProfileEntity;
-import com.project.expensetracker.repostiory.ProfileRepository;
+import com.project.expensetracker.repository.ProfileRepository;
 import com.project.expensetracker.util.JwtUtil;
 
 import lombok.RequiredArgsConstructor;

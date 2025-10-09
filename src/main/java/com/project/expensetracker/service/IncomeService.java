@@ -1,7 +1,11 @@
 package com.project.expensetracker.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.project.expensetracker.dto.ExpenseDTO;
 import com.project.expensetracker.dto.IncomeDTO;
 import com.project.expensetracker.entity.CategoryEntity;
 import com.project.expensetracker.entity.ExpenseEntity;
@@ -30,6 +34,17 @@ public class IncomeService {
 			IncomeEntity newIncome = toEntity(dto, profile, category);
 			newIncome = incomeRepository.save(newIncome);
 			return toDto(newIncome);
+			
+		}
+		
+		//retrieve all income for the current month/based on start and end date
+		public List<IncomeDTO> getCurrentMonthIncomeForCurrentUser(){
+			ProfileEntity profile = profileService.getCurrentProfile();
+			LocalDate now = LocalDate.now();
+			LocalDate startDate = now.withDayOfMonth(1);
+			LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
+			List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetween(profile.getId(),startDate, endDate);
+			return list.stream().map(this::toDto).toList();
 			
 		}
 	
