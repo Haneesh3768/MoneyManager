@@ -1,5 +1,6 @@
 package com.project.expensetracker.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -60,6 +61,21 @@ public class IncomeService {
 			incomeRepository.delete(entity);
 		}
 	
+		
+		//get latest 5  for incomes current user 
+		public List<IncomeDTO> getLatest5IncomesForCurretnUser(){
+			ProfileEntity profile = profileService.getCurrentProfile();
+			List<IncomeEntity> list = incomeRepository.findTop5ByProfileIdOrderByDateDesc(profile.getId());
+			return list.stream().map(this::toDto).toList();
+		}
+		
+		//get the total incomes for current user 
+		public BigDecimal getTotalExpenseForCurrentUser() {
+			ProfileEntity profile = profileService.getCurrentProfile();
+			BigDecimal total = incomeRepository.findTotalIncomeByProfileId(profile.getId());
+			return total != null ? total: BigDecimal.ZERO;
+		}
+		
 	//helper methods
 	private IncomeEntity toEntity(IncomeDTO dto, ProfileEntity profile,CategoryEntity category) {
 		return IncomeEntity.builder()
