@@ -44,6 +44,17 @@ public class ExpenseService {
 		
 	}
 	
+	//delete expenses by id for current user
+	public void deleteExpenses(Long expnseId) {
+		ProfileEntity profile = profileService.getCurrentProfile();
+		ExpenseEntity entity = expenseRepository.findById(expnseId)
+				.orElseThrow(() -> new RuntimeException("Expense not found"));
+		if(!entity.getProfile().getId().equals(profile.getId())) {
+			throw new RuntimeException("Unauthorized to delete this expense");
+		}
+		expenseRepository.delete(entity);
+	}
+	
 	
 	//helper methods
 	private ExpenseEntity toEntity(ExpenseDTO dto, ProfileEntity profile,CategoryEntity category) {
