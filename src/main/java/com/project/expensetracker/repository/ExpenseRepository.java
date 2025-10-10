@@ -1,6 +1,7 @@
 package com.project.expensetracker.repository;
 
 import java.math.BigDecimal;
+
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.domain.Sort;
@@ -29,4 +30,7 @@ public interface ExpenseRepository extends JpaRepository<ExpenseEntity, Long> {
     );
     
     List<ExpenseEntity> findByProfileIdAndDateBetween(Long profileId, LocalDate startDate, LocalDate endDate);
+    
+    //select * from expense table where profile_id = ?1 and date = ?2
+    List<ExpenseEntity> findByProfileIdAndDate(Long profileId, LocalDate date);
 }
