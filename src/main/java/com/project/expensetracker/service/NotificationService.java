@@ -44,8 +44,8 @@ public class NotificationService {
 		log.info("Job completed: sendDailyExpensesRemainder()");
 	}
 	
-	@Scheduled(cron = "0 * * * * *",zone = "IST")
-	//@Scheduled(cron = "0 0 23 * * *",zone = "IST")
+	//@Scheduled(cron = "0 * * * * *",zone = "IST")
+	@Scheduled(cron = "0 0 23 * * *",zone = "IST")
 	public void sendDailyExpenseSummary() {
 		log.info("Job started: sendDailyExpenseSummary()");
 		List<ProfileEntity> profiles = profileRepository.findAll();
@@ -86,7 +86,7 @@ public class NotificationService {
 				         .append("</tr>");
 				}
 				table.append("</table>");
-				String body ="Hi"+profile.getFullname()+",<br/><br/> Here is a summary of your expenses for today:<br/><br/>"+table+"<br/><br/>Best regards, <br/>Money Manager Team";
+				String body ="Hi" +profile.getFullname()+",<br/><br/> Here is a summary of your expenses for today:<br/><br/>"+table+"<br/><br/>Best regards, <br/>Money Manager Team";
 				emailService.sendEmail(profile.getEmail(), "Your daily Expense Summary", body);
 				log.info("Job completed: sendDailyExpenseSummary()");
 

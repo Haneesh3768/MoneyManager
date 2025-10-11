@@ -1,5 +1,6 @@
 package com.project.expensetracker.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,12 +30,15 @@ public class ProfileService {
 	private final AuthenticationManager authenticationManager;
 	private final JwtUtil jwtUtil;
 	
+	@Value("{app.acitvation.url}")
+	private String activationUrl;
+	
 	public ProfileDTO registerProfile(ProfileDTO profileDTO) {
         ProfileEntity newProfile = toEntity(profileDTO);
         newProfile.setActivationToken(UUID.randomUUID().toString());
         newProfile = profileRepository.save(newProfile);
         //send activation email
-        String activationLink = "http://localhost:2025/api/activate?token=" +newProfile.getActivationToken();
+        String activationLink =activationUrl+"/api/activate?token=" +newProfile.getActivationToken();
         String subject = "Activate your Expense Tracker Account";
         String body = "Click on the following activation link to acivate your account: "+activationLink;
         emailService.sendEmail(newProfile.getEmail(), subject, body);
