@@ -1,11 +1,11 @@
 package com.project.expensetracker.service;
 
 import java.math.BigDecimal;
+
 import java.time.LocalDate;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Sort;
 import com.project.expensetracker.dto.ExpenseDTO;
 import com.project.expensetracker.dto.IncomeDTO;
 import com.project.expensetracker.entity.CategoryEntity;
@@ -70,11 +70,19 @@ public class IncomeService {
 		}
 		
 		//get the total incomes for current user 
-		public BigDecimal getTotalExpenseForCurrentUser() {
+		public BigDecimal getTotalIncomeForCurrentUser() {
 			ProfileEntity profile = profileService.getCurrentProfile();
 			BigDecimal total = incomeRepository.findTotalIncomeByProfileId(profile.getId());
 			return total != null ? total: BigDecimal.ZERO;
 		}
+		
+		//filter incomes
+		public List<IncomeDTO> filterIncomes(LocalDate startDate,LocalDate endDate,String keyword,Sort sort){
+			ProfileEntity profile =  profileService.getCurrentProfile();
+			List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(profile.getId(), startDate, endDate,keyword, sort);
+			return list.stream().map(this::toDto).toList();
+		}
+		
 		
 	//helper methods
 	private IncomeEntity toEntity(IncomeDTO dto, ProfileEntity profile,CategoryEntity category) {
