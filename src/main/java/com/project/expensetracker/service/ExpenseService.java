@@ -1,9 +1,11 @@
 package com.project.expensetracker.service;
 
 import java.math.BigDecimal;
+
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.project.expensetracker.dto.ExpenseDTO;
@@ -69,6 +71,22 @@ public class ExpenseService {
 		BigDecimal total = expenseRepository.findTotalExpenseByProfileId(profile.getId());
 		return total != null ? total: BigDecimal.ZERO;
 	}
+	
+	
+	//filter expenses
+	public List<ExpenseDTO> filterExpenses(LocalDate startDate,LocalDate endDate,String keyword,Sort sort){
+		ProfileEntity profile =  profileService.getCurrentProfile();
+		List<ExpenseEntity> list = expenseRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(profile.getId(), startDate, endDate, keyword, sort);
+		return list.stream().map(this::toDto).toList();
+	}
+	
+	//notifications
+	public List<ExpenseDTO> getExpensesForUserOnDate(Long prifileId,LocalDate date){
+		List<ExpenseEntity> list = expenseRepository.findByProfileIdAndDate(prifileId, date);
+		return list.stream().map(this::toDto).toList();
+	}
+	
+	
 	
 	//helper methods
 	private ExpenseEntity toEntity(ExpenseDTO dto, ProfileEntity profile,CategoryEntity category) {
